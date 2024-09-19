@@ -1,0 +1,24 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+.product-card{
+
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    align-items: center;
+    border: 2px solid;
+    margin: 10px;
+    border-radius: 5px;
+    border-color: blue;
+    width: 600px;
+}
+h1{
+    text-align: center;
+    color: brown;
+}
+.col{
+    display: flex;
+    justify-content: center;
+}
