@@ -16,9 +16,39 @@ body{
 }
 h1{
     text-align: center;
-    color: brown;
+    color: blue;
+    margin: 0;
 }
 .col{
     display: flex;
     justify-content: center;
+}
+
+.forms{
+    margin-left: 40px;
+    border: 2px solid blue;
+    width: 400px;
+    padding: 20px;
+    margin-top: 50px;
+    border-radius: 5px;
+    box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
+
+}
+.click{
+    color: white;
+    background-color: blue;
+    border-radius: 5px;
+    border-color: blue;
+    width: 100px;
+    height: 25px;
+    
+}
+.click:hover{
+    opacity: 0.5;
+}
+.things{
+    border-color: black;
+    width: 40px;
+    height: 20px;
+    border-radius: 5px;
 }
