@@ -5,35 +5,41 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
-    public function store(Request $request, $productId)
+    public function store(Request $request, $id)
     {
-        // Валидируем данные
+        // Проверка, что пользователь авторизован
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Вы должны быть авторизованы для совершения заказа.');
+        }
+
         $request->validate([
             'quantity' => 'required|integer|min:1',
         ]);
 
-        // Находим товар по ID
-        $product = Product::findOrFail($productId);
+        $product = Product::findOrFail($id);
+        $order = new Order();
+        $order->product_id = $product->id;
+        $order->quantity = $request->quantity;
+        $order->total = $product->стоимость * $request->quantity;
 
-        // Проверяем доступное количество
-        if ($request->quantity > $product->количество) {
-            return back()->withErrors(['quantity' => 'Недостаточно товара на складе']);
-        }
+        // Связь заказа с авторизованным пользователем
+        $order->user_id = Auth::id();
+        $order->save();
 
-        // Считаем сумму заказа
-        $total = $request->quantity * $product->стоимость;
-
-        // Создаём заказ
-        Order::create([
-            'product_id' => $product->id,
-            'quantity' => $request->quantity,
-            'total' => $total,
-        ]);
-
-        // Вернём пользователя обратно с сообщением об успешном заказе
-        return back()->with('success', 'Заказ успешно оформлен!');
+        return redirect()->back()->with('success', 'Заказ успешно оформлен!');
     }
+    public function myOrders()
+    {
+        // Получаем заказы текущего пользователя
+        $orders = Order::where('user_id', Auth::id())->get();
+        return view('orders.my-orders', compact('orders'));
+    }
+    // public function product()
+    // {
+    //     return $this->belongsTo(Product::class);
+    // }
 }
